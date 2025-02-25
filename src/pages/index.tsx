@@ -7,15 +7,20 @@ interface Video {
   snippet: {
     title: string;
     thumbnails: {
-      medium: {
-        url: string;
-      };
+      medium: { url: string };
+      high?: { url: string };
+      maxres?: { url: string };
     };
   };
   statistics: {
     viewCount: string;
   };
 }
+
+const getThumbnail = (video: Video) =>
+  video.snippet.thumbnails.maxres?.url ||
+  video.snippet.thumbnails.high?.url ||
+  video.snippet.thumbnails.medium.url;
 
 export default function Home() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -56,7 +61,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="bg-gradient-to-r from-red-600 to-orange-500 text-white p-6 shadow-lg">
-        <h1 className="text-3xl font-bold text-center">Trending Videos</h1>
+        <h1 className="text-3xl font-bold text-center">🔥 Trendify 🔥</h1>
       </header>
 
       {/* Filters */}
@@ -106,45 +111,169 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Video Grid */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="text-xl font-semibold">Loading...</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {videos.map((video, index) => (
-              <motion.a
-                key={video.id}
-                href={`https://www.youtube.com/watch?v=${video.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative block bg-white rounded-lg shadow-md overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Ranking badge with big number */}
-                <div className="absolute top-2 left-2 z-10">
-                  <span className="text-5xl font-bold text-gray-200 opacity-75">
-                    {index + 1}
-                  </span>
+          <>
+            {/* Podium Section */}
+            {videos.length >= 3 && (
+              <div className="mb-10">
+                <div className="flex justify-center items-end space-x-4">
+                  {/* SECOND PLACE */}
+                  <motion.a
+                    key={videos[1].id}
+                    href={`https://www.youtube.com/watch?v=${videos[1].id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ width: '30%' }}
+                  >
+                    {/* Image Container */}
+                    <div className="relative" style={{ height: '200px' }}>
+                      {/* Medal Badge with Rank */}
+                      <div className="absolute top-2 left-2 z-10 flex flex-col items-center">
+                        <div className="flex items-center justify-center w-10 h-10 bg-red-600 rounded-full">
+                          <span className="text-white text-xl font-bold">2</span>
+                        </div>
+                        <span className="mt-1 text-2xl font-bold text-white">🥈</span>
+                      </div>
+                      <img
+                        src={getThumbnail(videos[1])}
+                        alt={videos[1].snippet.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Text Info */}
+                    <div className="p-2">
+                      <h2 className="text-base font-semibold text-gray-800 line-clamp-2">
+                        {videos[1].snippet.title}
+                      </h2>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {Number(videos[1].statistics.viewCount).toLocaleString()} views
+                      </p>
+                    </div>
+                  </motion.a>
+
+                  {/* FIRST PLACE */}
+                  <motion.a
+                    key={videos[0].id}
+                    href={`https://www.youtube.com/watch?v=${videos[0].id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ width: '40%' }}
+                  >
+                    <div className="relative" style={{ height: '250px' }}>
+                      <div className="absolute top-2 left-2 z-10 flex flex-col items-center">
+                        <div className="flex items-center justify-center w-12 h-12 bg-red-600 rounded-full">
+                          <span className="text-white text-3xl font-bold">1</span>
+                        </div>
+                        <span className="mt-1 text-2xl font-bold text-white">🥇</span>
+                      </div>
+                      <img
+                        src={getThumbnail(videos[0])}
+                        alt={videos[0].snippet.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-2">
+                      <h2 className="text-lg font-semibold text-gray-800 line-clamp-2">
+                        {videos[0].snippet.title}
+                      </h2>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {Number(videos[0].statistics.viewCount).toLocaleString()} views
+                      </p>
+                    </div>
+                  </motion.a>
+
+                  {/* THIRD PLACE */}
+                  <motion.a
+                    key={videos[2].id}
+                    href={`https://www.youtube.com/watch?v=${videos[2].id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ width: '30%' }}
+                  >
+                    <div className="relative" style={{ height: '180px' }}>
+                      <div className="absolute top-2 left-2 z-10 flex flex-col items-center">
+                        <div className="flex items-center justify-center w-10 h-10 bg-red-600 rounded-full">
+                          <span className="text-white text-xl font-bold">3</span>
+                        </div>
+                        <span className="mt-1 text-2xl font-bold text-white">🥉</span>
+                      </div>
+                      <img
+                        src={getThumbnail(videos[2])}
+                        alt={videos[2].snippet.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-2">
+                      <h2 className="text-base font-semibold text-gray-800 line-clamp-2">
+                        {videos[2].snippet.title}
+                      </h2>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {Number(videos[2].statistics.viewCount).toLocaleString()} views
+                      </p>
+                    </div>
+                  </motion.a>
                 </div>
-                <img
-                  src={video.snippet.thumbnails.medium.url}
-                  alt={video.snippet.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h2 className="text-lg font-semibold text-gray-800 line-clamp-2">
-                    {video.snippet.title}
-                  </h2>
-                  <p className="text-sm text-gray-600 mt-2">
-                    {Number(video.statistics.viewCount).toLocaleString()} views
-                  </p>
-                </div>
-              </motion.a>
-            ))}
-          </div>
+              </div>
+            )}
+
+            {/* Separator */}
+            {videos.length > 3 && (
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+                  Other Trending Videos
+                </h2>
+              </div>
+            )}
+
+            {/* Grid for the Rest of the Videos */}
+            {videos.length > 3 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {videos.slice(3).map((video, idx) => (
+                  <motion.a
+                    key={video.id}
+                    href={`https://www.youtube.com/watch?v=${video.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative block bg-white rounded-lg shadow-md overflow-hidden"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="absolute top-2 left-2 z-10 flex items-center justify-center w-10 h-10 bg-red-600 rounded-full">
+                      <span className="text-white text-xl font-bold">
+                        {idx + 4}
+                      </span>
+                    </div>
+                    <img
+                      src={getThumbnail(video)}
+                      alt={video.snippet.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4">
+                      <h2 className="text-lg font-semibold text-gray-800 line-clamp-2">
+                        {video.snippet.title}
+                      </h2>
+                      <p className="text-sm text-gray-600 mt-2">
+                        {Number(video.statistics.viewCount).toLocaleString()} views
+                      </p>
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
