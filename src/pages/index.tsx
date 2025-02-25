@@ -1,4 +1,3 @@
-// pages/index.tsx
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
@@ -114,16 +113,22 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {videos.map((video) => (
+            {videos.map((video, index) => (
               <motion.a
                 key={video.id}
                 href={`https://www.youtube.com/watch?v=${video.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-white rounded-lg shadow-md overflow-hidden"
+                className="relative block bg-white rounded-lg shadow-md overflow-hidden"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
+                {/* Ranking badge with big number */}
+                <div className="absolute top-2 left-2 z-10">
+                  <span className="text-5xl font-bold text-gray-200 opacity-75">
+                    {index + 1}
+                  </span>
+                </div>
                 <img
                   src={video.snippet.thumbnails.medium.url}
                   alt={video.snippet.title}
